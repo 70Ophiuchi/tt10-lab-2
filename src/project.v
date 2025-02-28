@@ -16,19 +16,10 @@ module tt_um_example (
     input  wire       rst_n     // reset_n - low to reset
 );
 
-  module custom_logic (
-    input [7:0] A,  // 8-bit input A
-    input [7:0] B,  // 8-bit input B
-    output [7:0] C  // 8-bit output C
-);
-    // Intermediate signal for XOR result
     wire [7:0] XOR_RESULT;
-    assign XOR_RESULT = A ^ B;
+    assign XOR_RESULT = ui_in ^ uio_in;
 
     // Output C based on A[7]
-    assign C = (A[7] == 0) ? XOR_RESULT : ~XOR_RESULT;
-
-endmodule
-
+    assign ui_out = (ui_in[7] == 0) ? XOR_RESULT : ~XOR_RESULT;
 
 endmodule
