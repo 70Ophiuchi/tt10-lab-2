@@ -5,7 +5,7 @@
 
 `default_nettype none
 
-module tt_um_example (
+module tt_um_adder (
     input  wire [7:0] ui_in,    // Dedicated inputs
     output wire [7:0] uo_out,   // Dedicated outputs
     input  wire [7:0] uio_in,   // IOs: Input path
@@ -16,10 +16,11 @@ module tt_um_example (
     input  wire       rst_n     // reset_n - low to reset
 );
 
-    wire [7:0] XOR_RESULT;
-    assign XOR_RESULT = ui_in ^ uio_in;
+  assign uo_out  = ui_in + uio_in;  // Example: ou_out is the sum of ui_in and uio_in
+  assign uio_out = 0;
+  assign uio_oe  = 0;
 
-    // Output C based on A[7]
-    assign ui_out = (ui_in[7] == 0) ? XOR_RESULT : ~XOR_RESULT;
+  // List all unused inputs to prevent warnings
+  wire _unused = &{ena, clk, rst_n, 1'b0};
 
 endmodule
