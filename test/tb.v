@@ -13,42 +13,40 @@ module tb ();
     #1;
   end
 
-  // Declare the wires and regs:
-  reg en;
-  reg [15:0] In;     // Input to the priority encoder
-  wire [7:0] C;      // Output of the priority encoder
-
+  // Wire up the inputs and outputs:
+  reg clk;
+  reg rst_n;
+  reg ena;
+  reg [7:0] ui_in;
+  reg [7:0] uio_in;
+  wire [7:0] uo_out;
+  wire [7:0] uio_out;
+  wire [7:0] uio_oe;
 `ifdef GL_TEST
   wire VPWR = 1'b1;
   wire VGND = 1'b0;
 `endif
 
-  // Instantiate the priority_encoder module
-  priority_encoder user_project (
+
+  // Replace tt_um_example with your module name:
+  tt_um_adder user_project (
+
       // Include power ports for the Gate Level test:
 `ifdef GL_TEST
       .VPWR(VPWR),
       .VGND(VGND),
 `endif
-      .In (In),
-      .C (C),
-      .en (en)        // Enable signal
+
+      .ui_in  (ui_in),    // Dedicated inputs
+      .uo_out (uo_out),   // Dedicated outputs
+      .uio_in (uio_in),   // IOs: Input path
+      .uio_out(uio_out),  // IOs: Output path
+      .uio_oe (uio_oe),   // IOs: Enable path (active high: 0=input, 1=output)
+      .ena    (ena),      // enable - goes high when design is selected
+      .clk    (clk),      // clock
+      .rst_n  (rst_n)     // not reset
   );
 
-  // Testbench stimulus
-  initial begin
-    // Initialize the inputs:
-    en = 0;
-    In = 16'b0000000000000000;
-
-    // Apply test vectors
-    #10 en = 1; In = 16'b1000000000000000;  // Test input for 8'd15
-    #10 In = 16'b0100000000000000;  // Test input for 8'd14
-    #10 In = 16'b0000000000000010;  // Test input for 8'd1
-    #10 In = 16'b0000000000000000;  // Test input for all zeros
-    
-    // Finish the simulation
-    #10 $finish;
-  end
-
 endmodule
+
+
